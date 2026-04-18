@@ -29,7 +29,7 @@ Para compilar o projeto no ambiente Windows (utilizando G++), utilize o script d
 
 Ou, se preferir o comando manual via terminal:
 
-```Bash
+```powershell
 g++ -Isrc src/*.cpp -o AnalisadorSintatico.exe
 ```
 
@@ -37,7 +37,7 @@ Execução
 O programa recebe o arquivo que deve ser lido como argumento de linha de comando:
 
 ```PowerShell
-.\AnalisadorSintatico.exe tests/teste1.txt
+.\AnalisadorSintatico.exe teste1.txt
 ```
 
 ---
