@@ -1,0 +1,43 @@
+-- [RAIZ] PROGRAMA_COMPLETO
+  |-- [NUMERO] 20
+  |-- [KEY_MEM] MEM
+  |  |-- [VARIAVEL] LIMIT
+  |-- [NUMERO] 1
+  |-- [KEY_MEM] MEM
+  |  |-- [VARIAVEL] CONT
+  |-- [OP_RELACIONAL] <
+  |  |-- [VARIAVEL] CONT
+  |  |-- [VARIAVEL] LIMIT
+  |-- [KEY_WHILE] WHILE
+  |  |-- [OP_ARITMETICO] *
+  |  |  |-- [VARIAVEL] CONT
+  |  |  |-- [NUMERO] 2
+  |  |-- [KEY_MEM] MEM
+  |  |  |-- [VARIAVEL] CONT
+  |-- [OP_ARITMETICO] +
+  |  |-- [VARIAVEL] CONT
+  |  |-- [NUMERO] 5
+  |-- [OP_ARITMETICO] -
+  |  |-- [VARIAVEL] CONT
+  |  |-- [NUMERO] 5
+  |-- [OP_ARITMETICO] |
+  |  |-- [VARIAVEL] CONT
+  |  |-- [NUMERO] 5
+  |-- [OP_ARITMETICO] /
+  |  |-- [VARIAVEL] CONT
+  |  |-- [NUMERO] 5
+  |-- [OP_ARITMETICO] %
+  |  |-- [VARIAVEL] CONT
+  |  |-- [NUMERO] 5
+  |-- [OP_ARITMETICO] ^
+  |  |-- [VARIAVEL] CONT
+  |  |-- [NUMERO] 2
+  |-- [KEY_RES] RES
+  |  |-- [NUMERO] 3
+  |-- [OP_RELACIONAL] >
+  |  |-- [VARIAVEL] CONT
+  |  |-- [NUMERO] 10
+  |-- [KEY_IF] IF
+  |  |-- [NUMERO] 0
+  |  |-- [KEY_MEM] MEM
+  |  |  |-- [VARIAVEL] CONT

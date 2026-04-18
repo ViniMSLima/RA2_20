@@ -16,16 +16,19 @@ vector<Token> lerTokens(string nomeArquivo) {
         // Ignora linhas vazias
         if (linha.empty()) continue;
 
-        // Procura onde está a vírgula
-        size_t posVirgula = linha.find(',');
-        if (posVirgula == string::npos) continue; // Pula a linha se estiver mal formatada
+        // Procura a primeira e a segunda vírgula
+        size_t posVirgula1 = linha.find(',');
+        size_t posVirgula2 = linha.find(',', posVirgula1 + 1);
+        
+        if (posVirgula1 == string::npos || posVirgula2 == string::npos) continue;
 
-        // Separa a string em duas partes: antes e depois da vírgula
-        string tipoLexer = linha.substr(0, posVirgula);
-        string valorLexer = linha.substr(posVirgula + 1);
+        string tipoLexer = linha.substr(0, posVirgula1);
+        string valorLexer = linha.substr(posVirgula1 + 1, posVirgula2 - posVirgula1 - 1);
+        string linhaLexer = linha.substr(posVirgula2 + 1);
 
         Token t;
         t.valor = valorLexer;
+        t.linha = stoi(linhaLexer); // Converte a string da linha para int
 
         // ==========================================
         // ADAPTER: Traduzindo Fase 1 para Fase 2

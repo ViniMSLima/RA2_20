@@ -12,6 +12,7 @@ using namespace std;
 struct Token {
     string tipo;   // Ex: NUMERO, PARENTE_ESQ, KEY_IF, OP_RELACIONAL
     string valor;  // Ex: 10, (, IF, >
+    int linha;     //  a linha do código original
 };
 
 // Declaração da função do Aluno 3
