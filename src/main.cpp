@@ -1,9 +1,10 @@
 #include <iostream>
 #include <string>
 #include "Fase1_Lexico.hpp"
-#include "LexerInterface.hpp" // Aluno 3
-#include "Gramatica.hpp"      // Aluno 1
-#include "AST.hpp"            // Aluno 2
+#include "LexerInterface.hpp"   // Aluno 3
+#include "Gramatica.hpp"        // Aluno 1
+#include "AST.hpp"              // Aluno 2
+#include "GeradorAssembly.hpp"  // Aluno 4
 
 using namespace std;
 
@@ -71,6 +72,9 @@ int main(int argc, char* argv[]) {
             arquivoArvore.close();
             cout << "\n[+] A Arvore Sintatica foi salva no arquivo 'arvore_sintatica.txt'." << endl;
         }
+
+        GeradorAssembly gerador;
+        gerador.gerar(arvore, "saida.s");
 
     } else {
         cout << "\n[FALHA] Compilacao abortada na Fase 2." << endl;

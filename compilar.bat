@@ -3,7 +3,7 @@ echo ===========================================
 echo  COMPILANDO O PROJETO PRINCIPAL (FASE 2)
 echo ===========================================
 
-g++ -Isrc src/main.cpp src/Fase1_Lexico.cpp src/LexerInterface.cpp src/AnalisadorSintatico.cpp src/ParserLL1.cpp src/ParserAST.cpp -o AnalisadorSintatico.exe
+g++ -Isrc src/main.cpp src/Fase1_Lexico.cpp src/LexerInterface.cpp src/AnalisadorSintatico.cpp src/ParserLL1.cpp src/ParserAST.cpp src/GeradorAssembly.cpp -o AnalisadorSintatico.exe
 
 if %ERRORLEVEL% EQU 0 (
     echo.
