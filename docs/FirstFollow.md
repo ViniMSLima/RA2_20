@@ -17,3 +17,5 @@
 * **FOLLOW(expressao)** = { PARENTE_DIR }
 * **FOLLOW(lista_operandos)** = { FIRST(operador_final) }
 * **FOLLOW(operando)** = { NUMERO, VARIAVEL, PARENTE_ESQ } U FIRST(operador_final)
+
+- A gramática é comprovadamente LL(1) pois os conjuntos FIRST das produções alternativas de cada não-terminal são disjuntos, eliminando ambiguidades e permitindo a escolha preditiva com um lookahead de 1 símbolo.

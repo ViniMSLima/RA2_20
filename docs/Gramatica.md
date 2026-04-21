@@ -7,6 +7,8 @@
 
 ## 1. Gramática EBNF (Fatorada)
 
+Σ (Terminais): { START, END, NUMERO, VARIAVEL, OP_ARITMETICO, OP_RELACIONAL, KEY_IF, KEY_WHILE, KEY_MEM, KEY_RES, PARENTE_ESQ, PARENTE_DIR }
+
 A gramática abaixo foi estruturada e fatorada à esquerda no nível do escopo do programa para eliminar conflitos e garantir determinismo estrito LL(1).
 
     programa          -> PARENTE_ESQ START PARENTE_DIR proximo_bloco
