@@ -37,6 +37,7 @@ A tabela abaixo ilustra o funcionamento interno do analisador. Ela mostra o cons
 ## 3. Árvore Sintática Abstrata (AST) Gerada
 A estrutura hierárquica abaixo representa a organização lógica do programa após a análise. Esta árvore é percorrida em pós-ordem pelo gerador para produzir as instruções Assembly ARMv7.
 
+```text
 -- [RAIZ] PROGRAMA_COMPLETO
   |-- [NUMERO] 10.5
   |-- [KEY_MEM] MEM
@@ -80,19 +81,4 @@ A estrutura hierárquica abaixo representa a organização lógica do programa a
   |  |  |-- [NUMERO] 1
   |  |-- [KEY_MEM] MEM
   |  |  |-- [VARIAVEL] B
-
-Entrada da árvore
-
-( START )
-( 10.5 A MEM )
-( 2.0 B MEM )
-( A B + )
-( A B - )
-( A B * )
-( A B | )
-( 10 3 / )
-( 10 3 % )
-( 2 3 ^ )
-( ( A B > ) ( 0 RES ) IF )
-( ( B 10 < ) ( ( B 1 + ) B MEM ) WHILE )
-( END )
+```
