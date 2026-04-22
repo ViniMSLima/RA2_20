@@ -1,116 +1,156 @@
+// Integrantes do grupo (ordem alfabética):
+// Vinícius Matheus Sary de Lima - ViniMSLima
+// Nome do grupo no Canvas: RA1 20
+
 #include "AST.hpp"
-#include "Gramatica.hpp" // Precisamos do mapa validarTerminal e tabelaLL1
+#include "Gramatica.hpp"
 
 NoAST* parsear(vector<Token> tokens) {
-    stack<string> pilhaSintatica;
-    stack<NoAST*> pilhaSemantica; // Nossa creche de nós
+    stack<string>  pilhaSintatica;
+    stack<NoAST*>  pilhaSemantica;
 
-    // Regra de Ouro do LL(1)
+    // Regra de Ouro do LL(1): EOF embaixo, símbolo inicial em cima
     pilhaSintatica.push("EOF");
     pilhaSintatica.push("programa");
 
-    // Adiciona o EOF no final da fita de tokens
-    Token tokenEOF; 
-    tokenEOF.tipo = "EOF"; 
+    // Marcador de fim de fita
+    Token tokenEOF;
+    tokenEOF.tipo  = "EOF";
     tokenEOF.valor = "EOF";
-    tokenEOF.linha = -1; // EOF não tem linha
+    tokenEOF.linha = -1;
     tokens.push_back(tokenEOF);
 
     int ponteiro = 0;
 
     while (!pilhaSintatica.empty()) {
-        string topo = pilhaSintatica.top();
-        Token tokenAtual = tokens[ponteiro];
+        string topo       = pilhaSintatica.top();
+        Token  tokenAtual = tokens[ponteiro];
 
+        // EPSILON não consome nada
         if (topo == "EPSILON") {
             pilhaSintatica.pop();
             continue;
         }
 
-        // Se for Terminal, tem que casar com o token!
+        // ── Terminal: deve casar com o token atual ──────────────────────
         if (validarTerminal(topo) || topo == "EOF") {
             if (topo == tokenAtual.tipo) {
-                pilhaSintatica.pop(); // Deu match, sai da pilha sintática
+                pilhaSintatica.pop();
 
-                // ==========================================
-                // 🌳 MÁGICA DA AST (ALUNO 2) AQUI!
-                // ==========================================
-                
+                // ========================================================
+                // CONSTRUÇÃO DA AST (ações semânticas)
+                // ========================================================
+
+                // Folhas: literais e variáveis
                 if (topo == "NUMERO" || topo == "VARIAVEL") {
                     pilhaSemantica.push(new NoAST(topo, tokenAtual.valor));
-                } 
+                }
+
+                // Operadores binários aritméticos e relacionais
                 else if (topo == "OP_ARITMETICO" || topo == "OP_RELACIONAL") {
                     NoAST* noOp = new NoAST(topo, tokenAtual.valor);
                     if (pilhaSemantica.size() >= 2) {
-                        NoAST* filhoDir = pilhaSemantica.top(); pilhaSemantica.pop();
-                        NoAST* filhoEsq = pilhaSemantica.top(); pilhaSemantica.pop();
-                        noOp->adicionarFilho(filhoEsq);
-                        noOp->adicionarFilho(filhoDir);
+                        NoAST* dir = pilhaSemantica.top(); pilhaSemantica.pop();
+                        NoAST* esq = pilhaSemantica.top(); pilhaSemantica.pop();
+                        noOp->adicionarFilho(esq);
+                        noOp->adicionarFilho(dir);
                     }
                     pilhaSemantica.push(noOp);
                 }
+
+                // Comandos binários de fluxo: IF e WHILE
+                // filhos[0] = condição, filhos[1] = ação
                 else if (topo == "KEY_IF" || topo == "KEY_WHILE") {
                     NoAST* noCmd = new NoAST(topo, tokenAtual.valor);
                     if (pilhaSemantica.size() >= 2) {
-                        NoAST* acao = pilhaSemantica.top(); pilhaSemantica.pop();
+                        NoAST* acao     = pilhaSemantica.top(); pilhaSemantica.pop();
                         NoAST* condicao = pilhaSemantica.top(); pilhaSemantica.pop();
                         noCmd->adicionarFilho(condicao);
                         noCmd->adicionarFilho(acao);
                     }
                     pilhaSemantica.push(noCmd);
                 }
-                else if (topo == "KEY_MEM" || topo == "KEY_RES") {
-                    NoAST* noUnario = new NoAST(topo, tokenAtual.valor);
-                    if (!pilhaSemantica.empty()) {
-                        NoAST* filho = pilhaSemantica.top(); pilhaSemantica.pop();
-                        noUnario->adicionarFilho(filho);
-                    }
-                    pilhaSemantica.push(noUnario);
-                }
-                // Nota: Parênteses, START e END são ignorados na AST.
 
-                ponteiro++; // Avança a fita
+                // --------------------------------------------------------
+                // MEM: desempilha DOIS itens — o valor a armazenar e a
+                // variável de destino.
+                //
+                // Para ( 10.5 A MEM ):
+                //   pilha: [NUMERO(10.5), VARIAVEL(A)]
+                //   → MEM(filhos[0]=NUMERO(10.5), filhos[1]=VARIAVEL(A))
+                //
+                // Para ( (B 1 +) B MEM ) dentro de um bloco WHILE:
+                //   pilha: [..., OP(+), VARIAVEL(B)]
+                //   → MEM(filhos[0]=OP(+), filhos[1]=VARIAVEL(B))
+                //   Pilha fica com apenas MEM, permitindo que WHILE
+                //   desempilhe [condição, MEM] corretamente.
+                // --------------------------------------------------------
+                else if (topo == "KEY_MEM") {
+                    NoAST* noMem = new NoAST(topo, tokenAtual.valor);
+                    if (pilhaSemantica.size() >= 2) {
+                        NoAST* destino = pilhaSemantica.top(); pilhaSemantica.pop();
+                        NoAST* valor   = pilhaSemantica.top(); pilhaSemantica.pop();
+                        noMem->adicionarFilho(valor);    // filhos[0] = expressão de valor
+                        noMem->adicionarFilho(destino);  // filhos[1] = variável de destino
+                    } else if (!pilhaSemantica.empty()) {
+                        // fallback: apenas um item (ex: bloco vazio)
+                        noMem->adicionarFilho(pilhaSemantica.top());
+                        pilhaSemantica.pop();
+                    }
+                    pilhaSemantica.push(noMem);
+                }
+
+                // RES: apenas um filho — o número de linhas anteriores
+                else if (topo == "KEY_RES") {
+                    NoAST* noRes = new NoAST(topo, tokenAtual.valor);
+                    if (!pilhaSemantica.empty()) {
+                        noRes->adicionarFilho(pilhaSemantica.top());
+                        pilhaSemantica.pop();
+                    }
+                    pilhaSemantica.push(noRes);
+                }
+
+                // Parênteses, START e END são ignorados na AST
+
+                ponteiro++; // avança a fita
             } else {
-                cout << "\n[ERRO SINTATICO] Linha " << tokenAtual.linha 
-                     << ": Esperava '" << topo << "' mas recebeu '" 
+                cout << "\n[ERRO SINTATICO] Linha " << tokenAtual.linha
+                     << ": Esperava '" << topo << "' mas recebeu '"
                      << tokenAtual.tipo << "' (" << tokenAtual.valor << ")" << endl;
                 return nullptr;
             }
-        } 
-        // Se for Não-Terminal, consulta o GPS (Tabela LL1 do Aluno 1)
+        }
+
+        // ── Não-Terminal: consulta a Tabela LL(1) ───────────────────────
         else {
             vector<string> regra = tabelaLL1[topo][tokenAtual.tipo];
-            
+
             if (regra.empty()) {
-                cout << "\n[ERRO SINTATICO] Linha " << tokenAtual.linha 
-                     << ": Nenhuma regra na tabela para [" << topo 
-                     << "] e [" << tokenAtual.tipo << "]" << endl;
+                cout << "\n[ERRO SINTATICO] Linha " << tokenAtual.linha
+                     << ": Nenhuma regra na tabela para ["
+                     << topo << "] e [" << tokenAtual.tipo << "]" << endl;
                 return nullptr;
             }
 
             pilhaSintatica.pop();
             if (regra[0] != "EPSILON") {
-                for (int i = regra.size() - 1; i >= 0; i--) {
+                for (int i = (int)regra.size() - 1; i >= 0; i--) {
                     pilhaSintatica.push(regra[i]);
                 }
             }
         }
     }
 
-    // ==========================================
-    // FINALIZANDO A ÁRVORE
-    // ==========================================
-    // Criamos um nó raiz principal para pendurar todos os comandos do programa
+    // ── Monta o nó raiz com todos os comandos em ordem ──────────────────
     NoAST* raiz = new NoAST("RAIZ", "PROGRAMA_COMPLETO");
-    
-    // Desempilha os comandos que sobraram e inverte para ficar na ordem cronológica certa
-    vector<NoAST*> temporario;
-    while(!pilhaSemantica.empty()) {
-        temporario.push_back(pilhaSemantica.top());
+
+    vector<NoAST*> temp;
+    while (!pilhaSemantica.empty()) {
+        temp.push_back(pilhaSemantica.top());
         pilhaSemantica.pop();
     }
-    for(int i = temporario.size() - 1; i >= 0; i--) {
-        raiz->adicionarFilho(temporario[i]);
+    for (int i = (int)temp.size() - 1; i >= 0; i--) {
+        raiz->adicionarFilho(temp[i]);
     }
 
     return raiz;

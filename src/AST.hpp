@@ -1,3 +1,7 @@
+// Integrantes do grupo (ordem alfabética):
+// Vinícius Matheus Sary de Lima - ViniMSLima
+// Nome do grupo no Canvas: RA1 20
+
 #ifndef AST_HPP
 #define AST_HPP
 

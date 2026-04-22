@@ -1,3 +1,7 @@
+// Integrantes do grupo (ordem alfabética):
+// Vinícius Matheus Sary de Lima - ViniMSLima
+// Nome do grupo no Canvas: RA1 20
+
 #ifndef FASE1_LEXICO_HPP
 #define FASE1_LEXICO_HPP
 
