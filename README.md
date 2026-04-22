@@ -45,27 +45,20 @@ O programa recebe o arquivo que deve ser lido como argumento de linha de comando
 ## 🧠 Sintaxe das Estruturas de Controle
 A linguagem utiliza a lógica de Notação Polonesa Reversa (RPN). As estruturas de controle consomem os blocos (expressões) que as precedem:
 
-IF (Tomada de Decisão): * Sintaxe: ( ( Condição ) ( Ação ) IF )
+* IF (Tomada de Decisão): * Sintaxe: ( ( Condição ) ( Ação ) IF )
+    O primeiro bloco é avaliado; se o resultado for diferente de zero (Verdadeiro), o segundo bloco (ação) é executado.
 
-O primeiro bloco é avaliado; se o resultado for diferente de zero (Verdadeiro), o segundo bloco (ação) é executado.
-
-WHILE (Laço de Repetição): * Sintaxe: ( ( Condição ) ( Ação ) WHILE )
-
-O bloco de ação é repetido enquanto o bloco de condição resultar em um valor verdadeiro (não-zero).
+* WHILE (Laço de Repetição): * Sintaxe: ( ( Condição ) ( Ação ) WHILE )
+    O bloco de ação é repetido enquanto o bloco de condição resultar em um valor verdadeiro (não-zero).
 
 ---
 
 ## ⚙️ Geração de Código Assembly
-Após a análise sintática bem-sucedida, o compilador gera automaticamente o arquivo:
-
----
-
-## 📄 saida.s
-
+Após a análise sintática bem-sucedida, o compilador gera automaticamente o arquivo 📄 saida.s.
 Este código segue a arquitetura **ARMv7** e está pronto para o simulador Cpulator (DE1-SoC).
 
-**Precisão:** Utiliza ponto flutuante de 64 bits (double) via instruções VFP.
-**Histórico:** Implementa o comando RES através de um buffer de resultados em memória (.data), permitindo acessar valores de linhas anteriores de forma determinística.
+* **Precisão:** Utiliza ponto flutuante de 64 bits (double) via instruções VFP.
+* **Histórico:** Implementa o comando RES através de um buffer de resultados em memória (.data), permitindo acessar valores de linhas anteriores de forma determinística.
 
 --- 
 
@@ -79,5 +72,5 @@ A documentação técnica foi segmentada na pasta /docs conforme exigido pelo ed
 
 ---
 
-## Robustez e Erros
+## 🛡️ Robustez e Erros
 O parser reporta erros sintáticos detalhados, indicando o número da linha e o token esperado, garantindo conformidade com os critérios de robustez do projeto.

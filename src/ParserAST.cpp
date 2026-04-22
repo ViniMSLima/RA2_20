@@ -5,7 +5,7 @@
 #include "AST.hpp"
 #include "Gramatica.hpp"
 
-NoAST* parsear(vector<Token> tokens) {
+NoAST* gerarArvore(vector<Token> tokens) {
     stack<string>  pilhaSintatica;
     stack<NoAST*>  pilhaSemantica;
 
@@ -71,20 +71,6 @@ NoAST* parsear(vector<Token> tokens) {
                     pilhaSemantica.push(noCmd);
                 }
 
-                // --------------------------------------------------------
-                // MEM: desempilha DOIS itens — o valor a armazenar e a
-                // variável de destino.
-                //
-                // Para ( 10.5 A MEM ):
-                //   pilha: [NUMERO(10.5), VARIAVEL(A)]
-                //   → MEM(filhos[0]=NUMERO(10.5), filhos[1]=VARIAVEL(A))
-                //
-                // Para ( (B 1 +) B MEM ) dentro de um bloco WHILE:
-                //   pilha: [..., OP(+), VARIAVEL(B)]
-                //   → MEM(filhos[0]=OP(+), filhos[1]=VARIAVEL(B))
-                //   Pilha fica com apenas MEM, permitindo que WHILE
-                //   desempilhe [condição, MEM] corretamente.
-                // --------------------------------------------------------
                 else if (topo == "KEY_MEM") {
                     NoAST* noMem = new NoAST(topo, tokenAtual.valor);
                     if (pilhaSemantica.size() >= 2) {

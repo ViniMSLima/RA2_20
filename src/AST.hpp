@@ -36,6 +36,6 @@ public:
 };
 
 // Declaração da função do Aluno 2
-NoAST* parsear(vector<Token> tokens);
+NoAST* gerarArvore(vector<Token> tokens);
 
 #endif

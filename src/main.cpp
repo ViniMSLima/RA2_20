@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <string>
+#include <fstream>
 #include "Fase1_Lexico.hpp"
 #include "LexerInterface.hpp"   // Aluno 3
 #include "Gramatica.hpp"        // Aluno 1
@@ -12,20 +13,17 @@
 
 using namespace std;
 
-// O (int argc, char* argv[]) é o que permite ler coisas direto do terminal!
 int main(int argc, char* argv[]) {
     // 1. VALIDAÇÃO DE SEGURANÇA
-    // Se o usuário não digitou o nome do arquivo, a gente avisa e fecha o programa.
     if (argc < 2) {
         cout << "\n[ERRO FATAL] Arquivo de codigo-fonte nao informado!" << endl;
         cout << "Modo de uso correto: ./AnalisadorSintatico <nome_do_arquivo.txt>" << endl;
         cout << "Exemplo: ./AnalisadorSintatico teste1.txt\n" << endl;
-        return 1; // Retorna erro pro sistema operacional
+        return 1; 
     }
 
-    // 2. PEGANDO O ARQUIVO DO TERMINAL
-    string arquivoCodigo = argv[1]; // Aqui ele pega o "teste1.txt" que o professor digitou
-    string arquivoTokens = "tokens_temp_fase1.txt"; // Arquivo temporário que a Fase 1 vai gerar
+    string arquivoCodigo = argv[1]; 
+    string arquivoTokens = "tokens_temp_fase1.txt"; 
 
     cout << "===========================================" << endl;
     cout << " COMPILADOR RPN - PIPELINE COMPLETO" << endl;
@@ -36,7 +34,6 @@ int main(int argc, char* argv[]) {
     // ESTEIRA 1: ANÁLISE LÉXICA (Trabalho 1)
     // ==========================================
     cout << "\n>>> INICIANDO FASE 1: ANALISE LEXICA" << endl;
-    // Pega o arquivo do professor e cospe o nosso .txt de tokens interno
     executarFase1(arquivoCodigo, arquivoTokens); 
 
     // ==========================================
@@ -53,23 +50,21 @@ int main(int argc, char* argv[]) {
     cout << "[2] Aluno 3: Carregando e adaptando tokens..." << endl;
     vector<Token> tokens = lerTokens(arquivoTokens); 
 
-    // Se a Fase 1 falhou e não gerou tokens, a gente para aqui
     if (tokens.empty()) {
         cout << "\n[FALHA] Nenhum token gerado. Verifique o arquivo de entrada." << endl;
         return 1;
     }
 
     cout << "[3] Aluno 2: Construindo Arvore Sintatica (AST)..." << endl;
-    NoAST* arvore = parsear(tokens);
+    // Alterado de parsear para gerarArvore conforme requisito 7.4 do edital
+    NoAST* arvore = gerarArvore(tokens);
 
     if (arvore != nullptr) {
         cout << "\n[SUCESSO] Codigo compilado sem erros sintaticos!" << endl;
         cout << "AST Gerada no console:\n" << endl;
         
-        // 1. Imprime na tela (console)
         arvore->imprimirArvore(cout); 
 
-        // 2. Salva no arquivo para o Aluno 4 (e para entregar)
         ofstream arquivoArvore("arvore_sintatica.txt");
         if (arquivoArvore.is_open()) {
             arvore->imprimirArvore(arquivoArvore);
@@ -77,6 +72,10 @@ int main(int argc, char* argv[]) {
             cout << "\n[+] A Arvore Sintatica foi salva no arquivo 'arvore_sintatica.txt'." << endl;
         }
 
+        // ==========================================
+        // ESTEIRA 4: GERAÇÃO DE CÓDIGO (Assembly)
+        // ==========================================
+        cout << "\n[4] Aluno 4: Gerando Codigo Assembly ARMv7 (Double Precision)..." << endl;
         GeradorAssembly gerador;
         gerador.gerar(arvore, "saida.s");
 
