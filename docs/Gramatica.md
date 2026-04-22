@@ -60,6 +60,8 @@ Semelhante ao `IF`, o comando `WHILE` é um nó pai com dois galhos principais. 
 
 **Entrada RPN:** `( ( X 10 < ) ( X 1 + ) WHILE )`
 **Hierarquia na AST:**
+
+```text
     [COMANDO] WHILE
       |
       |-- [CONDICAO] <
@@ -69,3 +71,4 @@ Semelhante ao `IF`, o comando `WHILE` é um nó pai com dois galhos principais. 
       |-- [ACAO] +
             |-- [VARIAVEL] X
             |-- [NUMERO] 1
+```
