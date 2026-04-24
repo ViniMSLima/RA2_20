@@ -1,0 +1,3 @@
+( START )
+( ( B 10 < ) ( ( B 1 + ) B MEM ) WHILE )
+( END )
