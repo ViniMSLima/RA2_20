@@ -1,8 +1,43 @@
 -- [RAIZ] PROGRAMA_COMPLETO
+  |-- [KEY_MEM] MEM
+  |  |-- [NUMERO] 10.5
+  |  |-- [VARIAVEL] A
+  |-- [KEY_MEM] MEM
+  |  |-- [NUMERO] 2.0
+  |  |-- [VARIAVEL] B
+  |-- [OP_ARITMETICO] +
+  |  |-- [VARIAVEL] A
+  |  |-- [VARIAVEL] B
+  |-- [OP_ARITMETICO] -
+  |  |-- [VARIAVEL] A
+  |  |-- [VARIAVEL] B
+  |-- [OP_ARITMETICO] *
+  |  |-- [VARIAVEL] A
+  |  |-- [VARIAVEL] B
+  |-- [OP_ARITMETICO] |
+  |  |-- [VARIAVEL] A
+  |  |-- [VARIAVEL] B
+  |-- [OP_ARITMETICO] /
+  |  |-- [NUMERO] 10
+  |  |-- [NUMERO] 3
+  |-- [OP_ARITMETICO] %
+  |  |-- [NUMERO] 10
+  |  |-- [NUMERO] 3
+  |-- [OP_ARITMETICO] ^
+  |  |-- [NUMERO] 2
+  |  |-- [NUMERO] 3
   |-- [KEY_IF] IF
-  |  |-- [OP_RELACIONAL] =
-  |  |  |-- [NUMERO] 2
-  |  |  |-- [NUMERO] 2
-  |  |-- [OP_ARITMETICO] *
-  |  |  |-- [NUMERO] 3
-  |  |  |-- [NUMERO] 2
+  |  |-- [OP_RELACIONAL] >
+  |  |  |-- [VARIAVEL] A
+  |  |  |-- [VARIAVEL] B
+  |  |-- [KEY_RES] RES
+  |  |  |-- [NUMERO] 0
+  |-- [KEY_WHILE] WHILE
+  |  |-- [OP_RELACIONAL] <
+  |  |  |-- [VARIAVEL] B
+  |  |  |-- [NUMERO] 10
+  |  |-- [KEY_MEM] MEM
+  |  |  |-- [OP_ARITMETICO] +
+  |  |  |  |-- [VARIAVEL] B
+  |  |  |  |-- [NUMERO] 1
+  |  |  |-- [VARIAVEL] B
